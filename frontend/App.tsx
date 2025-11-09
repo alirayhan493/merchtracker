@@ -1,34 +1,51 @@
 import { StatusBar } from 'expo-status-bar';
 import { TextInput, Button, View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import { useRouter } from 'expo-router';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ProductForm from './productForm';
 
+
+
+type RootStackParamList = {
+  Home: undefined;
+  ProductForm: undefined;
+}
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+
+function HomeScreen({ navigation } : any){
+  return (
+    <View style={{ flex:1, justifyContent: "center", alignItems: "center"}}>
+      <Text>Welcome to Merch Tracker!</Text>
+      <TouchableOpacity
+      style={{
+        backgroundColor: "#007bff",
+        padding: 12,
+        borderRadius: 8,
+        marginTop: 20,
+      }}
+      
+      onPress={() => navigation.navigate("ProductForm")}
+      >
+        <Text style={{ color: "#fff", fontWeight: "bold"}}>Go to Product Form</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 
 
 export default function App() {
-  const router = useRouter();
 
-  const addForm = () => router.push('/ProductForm');
-  const searchProd = () => router.push('/Products');
-  const damageList = () => router.push('/DamageList');
-  
+
   return (
-    <View style={styles.screen}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Merchandise Track App</Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => console.log("Button press!")}>
-              <Text style={styles.buttonText}>Add Merch</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => console.log("Button press!")}>
-              <Text style={styles.buttonText}>Search Merch</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => console.log("Button press!")}>
-              <Text style={styles.buttonText}>Damage List</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Home' id={undefined}>
+        <Stack.Screen name="Home" component={HomeScreen}/>
+        <Stack.Screen name='ProductForm' component={ProductForm} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
